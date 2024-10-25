@@ -1,31 +1,32 @@
 package edu.odu.cs.cs330.items;
 
+import java.util.Objects;
+
 /**
  * This class represents one Consumable Item--as found in most video games.
  * This includes food.
- *
+ * 
  * Consumable Items must be stackable.
  */
 @SuppressWarnings({
-    "PMD.CloneMethodReturnTypeMustMatchClassName",
-    "PMD.CloneThrowsCloneNotSupportedException",
-    "PMD.LawOfDemeter",
-    "PMD.OnlyOneReturn",
-    "PMD.ProperCloneImplementation",
-    "PMD.MethodArgumentCouldBeFinal",
-    "PMD.LocalVariableCouldBeFinal",
-    "PMD.BeanMembersShouldSerialize"
+        "PMD.CloneMethodReturnTypeMustMatchClassName",
+        "PMD.CloneThrowsCloneNotSupportedException",
+        "PMD.LawOfDemeter",
+        "PMD.OnlyOneReturn",
+        "PMD.ProperCloneImplementation",
+        "PMD.MethodArgumentCouldBeFinal",
+        "PMD.LocalVariableCouldBeFinal",
+        "PMD.BeanMembersShouldSerialize"
 })
 public class Consumable extends Item {
     /**
      * Format used to generate a printable representation.
      */
     public static final String FMT_STR = String.join(
-        "",
-        "  Nme: %s%n",
-        "  Eft: %s%n",
-        "  Use: %d%n"
-    );
+            "",
+            "  Nme: %s%n",
+            "  Eft: %s%n",
+            "  Use: %d%n");
 
     /**
      * The effect "buff" or "debuff" that is received when using this item.
@@ -41,116 +42,105 @@ public class Consumable extends Item {
      * Default to a Consumable Item with an empty name, no effect and zero
      * uses.
      */
-    public Consumable()
-    {
+    public Consumable() {
         super("[Placeholder]");
-
-        // Complete the remainder of this method
+        this.effect = "";
+        this.uses = 0;
     }
 
     /**
      * Retrieve the effect.
-     *
+     * 
      * @return the set effect (i.e., buff or debuff)
      */
-    public String getEffect()
-    {
+    public String getEffect() {
         return this.effect;
     }
 
     /**
      * Set a new buff or debuff.
-     *
+     * 
      * @param newEff replacement effect
      */
-    public void setEffect(String newEff)
-    {
+    public void setEffect(String newEff) {
         this.effect = newEff;
     }
 
     /**
      * Retrieve permitted number of uses.
-     *
+     * 
      * @return number of total uses
      */
-    public int getNumberOfUses()
-    {
+    public int getNumberOfUses() {
         return this.uses;
     }
 
     /**
      * Set the number of permitted uses.
-     *
+     * 
      * @param allowed number of allowed uses
      */
-    public void setNumberOfUses(int allowed)
-    {
+    public void setNumberOfUses(int allowed) {
         this.uses = allowed;
     }
 
     @Override
-    public boolean isStackable()
-    {
+    public boolean isStackable() {
         return true;
     }
 
     @Override
-    public int requiredNumberOfValues()
-    {
-        // Replace this with the correct value
-        return -1;
+    public int requiredNumberOfValues() {
+        return 3; // Number of values required to initialize a Consumable object
     }
 
     @Override
-    public void fromTokens(String[] tokens)
-    {
-
+    public void fromTokens(String[] tokens) {
+        this.setName(tokens[0]);
+        this.setEffect(tokens[1]);
+        this.setNumberOfUses(Integer.parseInt(tokens[2]));
     }
 
     /**
      * Clone--i.e., copy--this Consumable Item.
      */
     @Override
-    public Item clone()
-    {
-        // Replace the next line
-        return null;
+    public Item clone() {
+        Consumable cpy = new Consumable();
+        cpy.setName(this.getName());
+        cpy.setEffect(this.getEffect());
+        cpy.setNumberOfUses(this.getNumberOfUses());
+        return cpy;
     }
 
     /**
      * Check for logical equivalence--based on name and effect.
-     *
+     * 
      * @param rhs object for which a comparison is desired
      */
     @Override
-    public boolean equals(Object rhs)
-    {
+    public boolean equals(Object rhs) {
         if (!(rhs instanceof Consumable)) {
             return false;
         }
-
-        // Replace the "return false" with your logic
-        return false;
+        Consumable rhsItem = (Consumable) rhs;
+        return Objects.equals(this.getName(), rhsItem.getName()) &&
+                Objects.equals(this.getEffect(), rhsItem.getEffect());
     }
 
-    /**
-     * Generate a hash code based on name and effect.
-     *
-     * Add <code>name.hashCode()</code> and <code>effect.hashCode</code>, then
-     * return the result.
-     */
     @Override
-    public int hashCode()
-    {
-        return -1;
+    public int hashCode() {
+        return Objects.hash(this.getName(), this.getEffect());
     }
-
     /**
      * *Print* the Consumable Item.
      */
     @Override
-    public String toString()
-    {
-        return "Make sure to check Armour.toString for hints.";
+    public String toString() {
+        return String.format(
+                FMT_STR,
+                this.getName(),
+                this.getEffect(),
+                this.getNumberOfUses());
     }
 }
